@@ -141,12 +141,12 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
+							<tr th:each="item:${category}">
 							    <th><input type="checkbox"></th>
-								<th>建立日期</th>
-								<th>分類</th>
-								<th>流水帳數</th>
-								<th>Act</th>
+								<th th:text="${item.CreateDate}"></th>
+								<th th:text="${item.CategoryName}"></th>
+								<th th:text="${item.Count}"></th>
+								<th>Edit</th>
 							</tr>
 						</tbody>
 					</table>

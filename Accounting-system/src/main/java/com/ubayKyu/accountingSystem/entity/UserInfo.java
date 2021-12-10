@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(schema="dbo", name="USERSINFO")
+@Table(name="USERSINFO")
 public class UserInfo {
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

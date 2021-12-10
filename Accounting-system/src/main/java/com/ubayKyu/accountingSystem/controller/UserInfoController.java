@@ -47,18 +47,6 @@ public class UserInfoController {
 		model.addAttribute("message", "Hello Thymeleaf!!");
 		return "hello";
 	}
-	@GetMapping("/Login")
-	public String Login(HttpServletRequest request) {
-		
-		Object current = request.getSession().getAttribute("loginLevel");
-		
-		if(current == null) {
-			return "Login";
-		}else {
-			return "UserProfile";
-		}
-		
-	}
 	@GetMapping("/Default")
 	public String Default_page(Model model) {
 		model.addAttribute("newestDate", userInfoRepository.newest());
@@ -78,14 +66,6 @@ public class UserInfoController {
 	@RequestMapping("/AccountingDetail")
 	public String AccountingDetail() {
 		return "AccountingDetail";
-	}
-	@RequestMapping("/CategoryList")
-	public String CategoryList() {
-		return "CategoryList";
-	}
-	@RequestMapping("/CategoryDetail")
-	public String CategoryDetail() {
-		return "CategoryDetail";
 	}
 	@RequestMapping("/UserProfile")
 	public String UserProfile() {

@@ -22,6 +22,18 @@ public class LoginController {
 	@Autowired
 	private UserInfoRepository userInfoRepository;
 	
+	@GetMapping("/Login")
+	public String Login(HttpServletRequest request) {
+		
+		Object current = request.getSession().getAttribute("loginLevel");
+		
+		if(current == null) {
+			return "Login";
+		}else {
+			return "UserProfile";
+		}
+	}
+	
 	@PostMapping("/Login")
 	public String UserLogin(@RequestParam("account") String account,
 			                 @RequestParam("password") String password,
