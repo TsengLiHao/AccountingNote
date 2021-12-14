@@ -17,9 +17,8 @@
 	<table>
 		<tr>
 			<td><h1>流水帳管理系統</h1></td>
-			<td><a th:href="@{'/Login'}"
-				th:if="${session.loginLevel == null }">登入系統</a> <a
-				th:href="@{'/UserList'}" th:unless="${session.loginLevel == null }">登入系統</a>
+			<td><a th:href="@{'/Login'}" th:if="${session.loginLevel == null }">登入系統</a>
+				 <a th:href="@{'/UserList'}" th:unless="${session.loginLevel == null }">登入系統</a>
 			</td>
 		</tr>
 	</table>

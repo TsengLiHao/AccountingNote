@@ -15,6 +15,7 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 <link rel="stylesheet" th:herf="@{/css/bootstrap.min.css}" />
+<link href="/css/add.css" rel="stylesheet"></link>
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 </head>
@@ -39,18 +40,18 @@
 			</div>
 		</form>
 		<!-- Navbar-->
-		<form th:action="@{/Logout}" >
-		<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-			<li class="nav-item dropdown"><a
-				class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
-				role="button" data-bs-toggle="dropdown" aria-expanded="false"><i
-					class="fas fa-user fa-fw"
-					th:style="'color:' + @{(${session.loginLevel == 0} ? 'dodgerblue' : 'white')} + ''"></i></a>
-				<ul class="dropdown-menu dropdown-menu-end"
-					aria-labelledby="navbarDropdown">
-					<li><button type="submit" class="dropdown-item" >登出</button></li>
-				</ul></li>
-		</ul>
+		<form th:action="@{/Logout}">
+			<ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
+					role="button" data-bs-toggle="dropdown" aria-expanded="false"><i
+						class="fas fa-user fa-fw"
+						th:style="'color:' + @{(${session.loginLevel == 0} ? 'dodgerblue' : 'white')} + ''"></i></a>
+					<ul class="dropdown-menu dropdown-menu-end"
+						aria-labelledby="navbarDropdown">
+						<li><button type="submit" class="dropdown-item">登出</button></li>
+					</ul></li>
+			</ul>
 		</form>
 	</nav>
 	<div id="layoutSidenav">
@@ -124,6 +125,35 @@
 						<li class="breadcrumb-item"><a th:href="@{CategoryList}">流水帳紀錄</a></li>
 						<li class="breadcrumb-item active">流水帳分類管理</li>
 					</ol>
+				</div>
+				<div class="container">
+					<form th:action="@{/add}" th:object="${newCategory}"
+						th:method="post">
+						<table>
+							<tr>
+								<th>標題</th>
+								<th style="color: red">※</th>
+								<td><input type="text" th:field="*{CATEGORYNAME}"></td>
+							</tr>
+							<tr>
+								<th class="cell_title">備註</th>
+								<th></th>
+								<td><textarea rows="5" cols="20" name="description"
+										th:field="*{Body}" placeholder="Comment text"></textarea></td>
+							</tr>
+						</table>
+						<table>
+							<tr th:if="${validationError}"
+								th:each="error : ${validationError}">
+								<td style="color: red;" th:text="${error}"></td>
+							</tr>
+						</table>
+						<input type="hidden" th:value="${session.loginUser}" id="USERID" name="USERID">
+						<br>
+						<div class="btn_area_center">
+							<input type="submit" value="save">
+						</div>
+					</form>
 				</div>
 			</main>
 		</div>

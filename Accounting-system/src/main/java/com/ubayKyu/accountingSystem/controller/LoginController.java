@@ -46,6 +46,7 @@ public class LoginController {
 			
 			if(userAccount.equals(account) && userPWD.equals(password)){
 				session.setAttribute("loginLevel", userInfoRepository.userInfo(account).USERLEVEL);
+				session.setAttribute("loginUser", userInfoRepository.userInfo(account).ID);
 				return "UserProfile";
 			}
 	        else {
@@ -63,8 +64,9 @@ public class LoginController {
 		
         HttpSession session = request.getSession();
         
-        if(session.getAttribute("loginLevel") != null ) {
+        if(session.getAttribute("loginLevel") != null && session.getAttribute("loginUser") != null ) {
         	session.removeAttribute("loginLevel");
+        	session.removeAttribute("loginUser");
         	return "Login";
         }
         return "Login";
