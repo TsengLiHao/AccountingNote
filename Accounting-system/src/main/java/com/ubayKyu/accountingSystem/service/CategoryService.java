@@ -16,13 +16,21 @@ public class CategoryService {
 
 	@Autowired
 	private CategoryRepository categoryRepo;
-	
-	public Page<CategoryInfo> listCategoryInfos(){
+
+	public Page<CategoryInfo> listCategoryInfos() {
 		Pageable pageable = PageRequest.of(0, 10);
 		return categoryRepo.findAll(pageable);
 	}
-	
+
 	public CategoryInfo saveCategoryInfo(CategoryInfo CategoryInfo) {
 		return categoryRepo.save(CategoryInfo);
+	}
+	
+	public CategoryInfo get(Integer id) {
+        return categoryRepo.findById(id).get();
+    }
+
+	public void delete(Integer id) {
+		categoryRepo.deleteById(id);
 	}
 }

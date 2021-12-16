@@ -25,4 +25,11 @@ public interface CategoryRepository extends JpaRepository<CategoryInfo, Integer>
 		   ,countQuery = "SELECT count(*) FROM AccountingNote.dbo.Category WHERE Category.UserID = ?1"
 		   ,nativeQuery = true)
 	public Page<Map<String,Object>> category(@Param("UserID")String userID, Pageable pageable);
+	
+	@Query(value = "SELECT COUNT(Accounting.CategoryName) as Count"
+			+ "	    FROM AccountingNote.dbo.Category"
+			+ "	    LEFT JOIN AccountingNote.dbo.Accounting"
+			+ "	    ON Category.CategoryName = Accounting.CategoryName"
+			+ "	    WHERE CategoryID = ?1", nativeQuery = true)
+	public Long categoryCount(int id);
 }

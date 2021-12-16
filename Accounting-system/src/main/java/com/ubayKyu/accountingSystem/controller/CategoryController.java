@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.ubayKyu.accountingSystem.entity.CategoryInfo;
 import com.ubayKyu.accountingSystem.repository.CategoryRepository;
@@ -74,7 +75,7 @@ public class CategoryController {
 	}
 	
 	@PostMapping("/add")
-	public String saveCategory(@Validated @ModelAttribute("newCategory") CategoryInfo newCategory, BindingResult result, Model model) {
+	public String saveCategory(@Validated @ModelAttribute("newCategory") CategoryInfo newCategory, BindingResult result, Model model, HttpServletRequest request) {
 		
 		if (result.hasErrors()) {
             List<String> errorList = new ArrayList<String>();
@@ -86,15 +87,37 @@ public class CategoryController {
         }else {
     		categoryService.saveCategoryInfo(newCategory);
     		
-    		return "CategoryList";
+    		return listPage(model, request, 1);
         }
 	}
 	
-	@GetMapping("CategoryDetail/edit/{id}")
-	public String editCategory() {
-		
-		
-		return "CategoryDetail";
+	@GetMapping("/{id}")
+	public ModelAndView showEditProductPage(@PathVariable(name = "id") int id) {
+	    ModelAndView mav = new ModelAndView("/CategoryDetail");
+	    CategoryInfo categoryInfo = categoryService.get(id);
+	    mav.addObject("newCategory", categoryInfo);
+	    
+	    return mav;
 	}
+	
+	@PostMapping("/delete")
+	public String deleteProduct(Map<String,Object> map, HttpServletRequest request, Model model) {
+		
+		if(request.getParameterValues("categoryID") != null ) {
+			for(String categoryIDStr : request.getParameterValues("categoryID")) {
+				int categoryID = Integer.parseInt(categoryIDStr);
+				Long categoryCount = categoryRepository.categoryCount(categoryID);
+				if(categoryCount != 0) {
+				    map.put("deleteMsg", "此分類裡已有流水帳,無法刪除");
+			    }else {
+			    	categoryService.delete(categoryID);
+			    }
+			}
+			return listPage(model, request, 1);
+		}else {
+			map.put("deleteMsg", "請選擇項目後刪除");
+			return listPage(model, request, 1);
+		}
+	 }	
 	
 }
