@@ -75,7 +75,10 @@ public class CategoryController {
 	}
 	
 	@PostMapping("/add")
-	public String saveCategory(@Validated @ModelAttribute("newCategory") CategoryInfo newCategory, BindingResult result, Model model, HttpServletRequest request) {
+	public String saveCategory(@Validated @ModelAttribute("newCategory") CategoryInfo newCategory, BindingResult result, Model model, HttpServletRequest request, Map<String,Object> map, @RequestParam("CATEGORYNAME") String categoryName) {
+		
+		Object current = request.getSession().getAttribute("loginUser");
+		List<String> ListOfCategoryName = categoryRepository.ListOfcategoryName(current.toString());
 		
 		if (result.hasErrors()) {
             List<String> errorList = new ArrayList<String>();
@@ -84,9 +87,11 @@ public class CategoryController {
             }
             model.addAttribute("validationError", errorList);
             return "CategoryDetail";
+        }else if(ListOfCategoryName.contains(categoryName)) {
+        	map.put("renameMsg", "標題名稱重複,請重新命名");
+			return "CategoryDetail";
         }else {
     		categoryService.saveCategoryInfo(newCategory);
-    		
     		return listPage(model, request, 1);
         }
 	}

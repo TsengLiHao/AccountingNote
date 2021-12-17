@@ -32,4 +32,7 @@ public interface CategoryRepository extends JpaRepository<CategoryInfo, Integer>
 			+ "	    ON Category.CategoryName = Accounting.CategoryName"
 			+ "	    WHERE CategoryID = ?1", nativeQuery = true)
 	public Long categoryCount(int id);
+	
+	@Query(value = "SELECT CATEGORYNAME FROM CATEGORY WHERE USERID = ?1", nativeQuery = true)
+    public List<String> ListOfcategoryName(String userID);
 }

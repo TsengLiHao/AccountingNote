@@ -133,7 +133,7 @@
 							<tr>
 								<th>標題</th>
 								<th style="color: red">※</th>
-								<td><input type="text" th:field="*{CATEGORYNAME}"></td>
+								<td><input type="text" th:field="*{CATEGORYNAME}" name="CATEGORYNAME"></td>
 							</tr>
 							<tr>
 								<th class="cell_title">備註</th>
@@ -148,6 +148,7 @@
 								<td style="color: red;" th:text="${error}"></td>
 							</tr>
 						</table>
+						<p style="color:red" th:text="${renameMsg}" th:if="${not #strings.isEmpty(renameMsg)}"></p>
 						<span th:each="i:${newCategory}">
 						<input type="hidden" th:field="*{CATEGORYID}" th:if="${i.CATEGORYID != null}">
 						<input type="hidden" th:field="*{CREATEDATE}" th:if="${i.CREATEDATE != null}">
