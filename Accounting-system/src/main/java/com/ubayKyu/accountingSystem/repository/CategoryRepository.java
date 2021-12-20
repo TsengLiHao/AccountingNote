@@ -19,7 +19,7 @@ public interface CategoryRepository extends JpaRepository<CategoryInfo, Integer>
 	@Query(value = "SELECT CategoryID, Category.UserID, Category.CreateDate, Category.CategoryName, Category.Body ,COUNT(Accounting.CategoryName) as Count"
 			+ "     FROM AccountingNote.dbo.Category"
 			+ "     LEFT JOIN AccountingNote.dbo.Accounting"
-			+ "     ON Category.CategoryName = Accounting.CategoryName"
+			+ "     ON Category.CategoryName = Accounting.CategoryName AND Category.UserID = Accounting.UserID"
 			+ "     WHERE Category.UserID = ?1"
 			+ "     GROUP BY CategoryID,Category.UserID,Category.CreateDate, Category.CategoryName, Category.Body ORDER BY Category.CreateDate DESC"
 		   ,countQuery = "SELECT count(*) FROM AccountingNote.dbo.Category WHERE Category.UserID = ?1"
@@ -29,7 +29,7 @@ public interface CategoryRepository extends JpaRepository<CategoryInfo, Integer>
 	@Query(value = "SELECT COUNT(Accounting.CategoryName) as Count"
 			+ "	    FROM AccountingNote.dbo.Category"
 			+ "	    LEFT JOIN AccountingNote.dbo.Accounting"
-			+ "	    ON Category.CategoryName = Accounting.CategoryName"
+			+ "	    ON Category.CategoryName = Accounting.CategoryName AND Category.UserID = Accounting.UserID"
 			+ "	    WHERE CategoryID = ?1", nativeQuery = true)
 	public Long categoryCount(int id);
 	

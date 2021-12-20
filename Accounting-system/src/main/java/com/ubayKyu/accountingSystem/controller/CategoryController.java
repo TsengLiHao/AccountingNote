@@ -47,7 +47,6 @@ public class CategoryController {
 //		List<CategoryInfo> listCategory = page.getContent();
 //		model.addAttribute("categoryInfo", listCategory);
 		return listPage(model, request, 1);
-		
 	}
 	
 	@GetMapping("/page/{pageNumber}")
@@ -97,8 +96,8 @@ public class CategoryController {
 	}
 	
 	@GetMapping("/{id}")
-	public ModelAndView showEditProductPage(@PathVariable(name = "id") int id) {
-	    ModelAndView mav = new ModelAndView("/CategoryDetail");
+	public ModelAndView editPage(@PathVariable("id") int id) {
+	    ModelAndView mav = new ModelAndView("CategoryDetail");
 	    CategoryInfo categoryInfo = categoryService.get(id);
 	    mav.addObject("newCategory", categoryInfo);
 	    

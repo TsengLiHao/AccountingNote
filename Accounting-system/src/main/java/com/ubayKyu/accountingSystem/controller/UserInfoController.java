@@ -59,14 +59,6 @@ public class UserInfoController {
 	public String UserList() {
 		return "UserList";
 	}
-	@RequestMapping("/AccountingList")
-	public String AccountingList() {
-		return "AccountingList";
-	}
-	@RequestMapping("/AccountingDetail")
-	public String AccountingDetail() {
-		return "AccountingDetail";
-	}
 	@RequestMapping("/UserProfile")
 	public String UserProfile() {
 		return "UserProfile";
