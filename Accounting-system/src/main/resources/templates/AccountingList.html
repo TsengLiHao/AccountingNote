@@ -26,12 +26,18 @@
 				<div class="card-body">
 					<a th:href="@{/AccountingDetail}" class="button"><button>Add</button></a>
 				</div>
-				<form th:action="@{/delete}" th:method="post">
+				<form th:action="@{/AccountingList/delete}" th:method="post">
 				<div class="card-body">
 				<input type=submit value="Del" onclick="return confirm('確定要刪除嗎?')"><br>
 				</div>
 				<div class="container">
-					<table class="table table-striped table-bordered">
+						<table>
+							<tr>
+								<th>小計:</th>
+								<th th:text="|${totalAmount}元|"></th>
+							</tr>
+						</table>
+						<table class="table table-striped table-bordered">
 						<thead class="table-dark">
 							<tr>
 								<th></th>
@@ -46,12 +52,12 @@
 						<tbody>
 							<tr th:each="item:${accounting}">
 								<th><input type="checkbox" th:value="${item.ID}" name="ID"></th>
-								<th th:text="${#dates.format(item.CREATEDATE,'yyyy-MM-dd')}"></th>
+								<th th:text="${#dates.format(item.CREATEDATE,'yyyy-MM-dd ')}"></th>
 								<th th:text="${item.CATEGORYNAME}"></th>
-								<th th:text="${item.ACTTYPE}"></th>
+								<th th:text="@{(${item.ACTTYPE == 0} ? '支出' : '收入')}" th:style="'color:' + @{(${item.ACTTYPE == 0} ? 'red' : 'black')} + ''"></th>
 								<th th:text="${item.Amount}"></th>
 								<th th:text="${item.Caption}"></th>
-								<th><a th:href="@{${item.ID}}">Edit</a></th>
+								<th><a th:href="@{'/' + ${item.ID}}">Edit</a></th>
 							</tr>
 						</tbody>
 					</table>
@@ -62,7 +68,7 @@
                </div>
 			<div align="center">
 			
-			    <a th:if="${currentPage > 1}" th:href="@{AccountingList/page/1}" >＜＜</a>
+			    <a th:if="${currentPage > 1}" th:href="@{/AccountingList/page/1}" >＜＜</a>
 				<span th:unless="${currentPage > 1}">＜＜</span>
 				
 				<span>|</span>
@@ -73,18 +79,18 @@
 				<span>|</span>
 				
 				<span th:each="i:${#numbers.sequence(1,totalPages)}"> 
-				<a th:if="${i != currentPage}" th:href="@{'AccountingList/page/' + ${i}}">[[${i}]]</a>
+				<a th:if="${i != currentPage}" th:href="@{'/AccountingList/page/' + ${i}}">[[${i}]]</a>
 				<span th:unless="${i != currentPage}">[[${i}]]</span>
 				</span>
 				
 				<span>|</span>
 				
-				<a th:if="${currentPage < totalPages}" th:href="@{'AccountingList/page/' + ${currentPage + 1}}" >＞</a>
+				<a th:if="${currentPage < totalPages}" th:href="@{'/AccountingList/page/' + ${currentPage + 1}}" >＞</a>
 				<span th:unless="${currentPage < totalPages}">＞</span>
 				
 				<span>|</span>
 				
-				<a th:if="${currentPage < totalPages}" th:href="@{'AccountingList/page/' + ${totalPages}}" >＞＞</a>
+				<a th:if="${currentPage < totalPages}" th:href="@{'/AccountingList/page/' + ${totalPages}}" >＞＞</a>
 				<span th:unless="${currentPage < totalPages}">＞＞</span>
 				
 			</div>

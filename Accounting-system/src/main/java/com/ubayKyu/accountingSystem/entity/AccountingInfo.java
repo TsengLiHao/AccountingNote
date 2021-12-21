@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(schema="dbo", name="ACCOUNTING")
 public class AccountingInfo {
@@ -22,6 +25,7 @@ public class AccountingInfo {
 	public Integer ACTTYPE;
 	public Date CREATEDATE;
 	public String Body;
+	public String CATEGORYNAME;
 	public Integer getID() {
 		return ID;
 	}
@@ -63,6 +67,12 @@ public class AccountingInfo {
 	}
 	public void setBody(String body) {
 		Body = body;
+	}
+	public String getCATEGORYNAME() {
+		return CATEGORYNAME;
+	}
+	public void setCATEGORYNAME(String cATEGORYNAME) {
+		CATEGORYNAME = cATEGORYNAME;
 	}
 	
 	

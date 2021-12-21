@@ -95,7 +95,7 @@ public class CategoryController {
         }
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/edit/{id}")
 	public ModelAndView editPage(@PathVariable("id") int id) {
 	    ModelAndView mav = new ModelAndView("CategoryDetail");
 	    CategoryInfo categoryInfo = categoryService.get(id);

@@ -22,7 +22,7 @@
 	<div th:fragment="html_header">
 		<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
 		<!-- Navbar Brand-->
-		<a class="navbar-brand ps-3" th:href="@{UserList}">流水帳管理系統</a>
+		<a class="navbar-brand ps-3" th:href="@{/UserList}">流水帳管理系統</a>
 		<!-- Sidebar Toggle-->
 		<button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
 			id="sidebarToggle" href="#!">
@@ -76,7 +76,7 @@
 							<div class="collapse" id="collapseAdmin"
 								aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
 								<nav class="sb-sidenav-menu-nested nav">
-									<a class="nav-link" th:href="@{UserList}">會員管理</a>
+									<a class="nav-link" th:href="@{/UserList}">會員管理</a>
 								</nav>
 							</div>
 						</div>
@@ -93,7 +93,7 @@
 						<div class="collapse" id="collapseUser"
 							aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
 							<nav class="sb-sidenav-menu-nested nav">
-								<a class="nav-link" th:href="@{UserProfile}">個人資訊</a>
+								<a class="nav-link" th:href="@{/UserProfile}">個人資訊</a>
 							</nav>
 						</div>
 						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -109,8 +109,8 @@
 						<div class="collapse" id="collapseRecord"
 							aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
 							<nav class="sb-sidenav-menu-nested nav">
-								<a class="nav-link" th:href="@{AccountingList}">流水帳管理</a> <a
-									class="nav-link" th:href="@{CategoryList}">流水帳分類管理</a>
+								<a class="nav-link" th:href="@{/AccountingList}">流水帳管理</a> <a
+									class="nav-link" th:href="@{/CategoryList}">流水帳分類管理</a>
 							</nav>
 						</div>
 					</div>
