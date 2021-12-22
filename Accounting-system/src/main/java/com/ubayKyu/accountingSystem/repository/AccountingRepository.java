@@ -21,7 +21,13 @@ public interface AccountingRepository extends JpaRepository<AccountingInfo,Integ
 	@Query(value = "SELECT * FROM ACCOUNTING WHERE USERID = ?1", nativeQuery = true)
 	public Page<AccountingInfo> accounting(String userID, Pageable pageable);
 	
-	@Query(value = " SELECT(SELECT SUM(Amount) FROM Accounting WHERE ActType='1' AND UserID = ?1)"
-			+ "     -(SELECT SUM(Amount) FROM Accounting  WHERE ActType='0' AND UserID = ?1)　AS Total ", nativeQuery = true)
+	@Query(value = " SELECT(SELECT ISNULL(SUM(Amount),0) FROM Accounting WHERE ActType='1' AND UserID = ?1)"
+			+ "     -(SELECT ISNULL(SUM(Amount),0) FROM Accounting  WHERE ActType='0' AND UserID = ?1)　AS Total ", nativeQuery = true)
 	public Long accountingTotal(String userID);
+	
+	@Query(value = " SELECT(SELECT ISNULL(SUM(Amount),0) FROM Accounting WHERE ActType='1' AND UserID = ?1 "
+			+ "      AND CreateDate >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AND  CreateDate <= EOMONTH(GETDATE()))"
+			+ "     -(SELECT ISNULL(SUM(Amount),0) FROM Accounting  WHERE ActType='0' AND UserID = ?1 "
+			+ "      AND CreateDate >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AND  CreateDate <= EOMONTH(GETDATE()))　AS Total ", nativeQuery = true)
+	public Long accountingMonthTotal(String userID);
 }

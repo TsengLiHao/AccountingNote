@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ubayKyu.accountingSystem.entity.AccountingInfo;
+import com.ubayKyu.accountingSystem.entity.CategoryInfo;
 import com.ubayKyu.accountingSystem.repository.AccountingRepository;
 
 @Service
@@ -18,4 +19,12 @@ public class AccountingService {
 	public void delete(Integer id) {
 		accountingRepo.deleteById(id);
 	}
+	
+	public AccountingInfo saveAccountingInfo(AccountingInfo AccountingInfo) {
+		return accountingRepo.save(AccountingInfo);
+	}
+	
+	public AccountingInfo get(Integer id) {
+        return accountingRepo.findById(id).get();
+    }
 }

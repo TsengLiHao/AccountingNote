@@ -19,7 +19,7 @@
 				<div class="container-fluid px-4">
 					<h2 class="mt-4">流水帳管理</h2>
 					<ol class="breadcrumb mb-4">
-						<li class="breadcrumb-item"><a th:href="@{AccountingList}">流水帳紀錄</a></li>
+						<li class="breadcrumb-item"><a th:href="@{/AccountingList}">流水帳紀錄</a></li>
 						<li class="breadcrumb-item active">流水帳管理</li>
 					</ol>
 				</div>
@@ -33,8 +33,12 @@
 				<div class="container">
 						<table>
 							<tr>
-								<th>小計:</th>
-								<th th:text="|${totalAmount}元|"></th>
+								<th>總金額小計:</th>
+								<th th:text="|${totalAmount}元|" th:style="'color:' + @{(${totalAmount < 0} ? 'red' : 'black')} "></th>
+							</tr>
+							<tr>
+								<th>本月小計:</th>
+								<th th:text="|${totalMonthAmount}元|" th:style="'color:' + @{(${totalMonthAmount < 0} ? 'red' : 'black')} "></th>
 							</tr>
 						</table>
 						<table class="table table-striped table-bordered">
@@ -54,10 +58,10 @@
 								<th><input type="checkbox" th:value="${item.ID}" name="ID"></th>
 								<th th:text="${#dates.format(item.CREATEDATE,'yyyy-MM-dd ')}"></th>
 								<th th:text="${item.CATEGORYNAME}"></th>
-								<th th:text="@{(${item.ACTTYPE == 0} ? '支出' : '收入')}" th:style="'color:' + @{(${item.ACTTYPE == 0} ? 'red' : 'black')} + ''"></th>
-								<th th:text="${item.Amount}"></th>
+								<th th:text="@{(${item.ACTTYPE == 0} ? '支出' : '收入')}" ></th>
+								<th th:text="${item.Amount}" th:style="'color:' + @{(${item.ACTTYPE == 0} ? 'red' : 'black')} "></th>
 								<th th:text="${item.Caption}"></th>
-								<th><a th:href="@{'/' + ${item.ID}}">Edit</a></th>
+								<th><a th:href="@{'/AccountingList/edit/' + ${item.ID}}">Edit</a></th>
 							</tr>
 						</tbody>
 					</table>

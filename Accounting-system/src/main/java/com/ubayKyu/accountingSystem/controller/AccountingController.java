@@ -1,5 +1,7 @@
 package com.ubayKyu.accountingSystem.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -10,12 +12,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.ubayKyu.accountingSystem.entity.AccountingInfo;
+import com.ubayKyu.accountingSystem.entity.CategoryInfo;
 import com.ubayKyu.accountingSystem.repository.AccountingRepository;
 import com.ubayKyu.accountingSystem.service.AccountingService;
 import com.ubayKyu.accountingSystem.service.CategoryService;
@@ -40,7 +49,7 @@ public class AccountingController {
 		return listPage(model, request, 1);
 	}
 	
-	@GetMapping("AccountingList/page/{pageNumber}")
+	@GetMapping("/AccountingList/page/{pageNumber}")
 	public String listPage(Model model, HttpServletRequest request, @PathVariable("pageNumber") int currentPage) {
 		
 		Object current = request.getSession().getAttribute("loginUser");
@@ -52,13 +61,9 @@ public class AccountingController {
 		model.addAttribute("accounting", listAccounting);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("totalAmount", accountingRepository.accountingTotal(current.toString()));
+		model.addAttribute("totalMonthAmount", accountingRepository.accountingMonthTotal(current.toString()));
 		
 		return "AccountingList";
-	}
-	
-	@RequestMapping("/AccountingDetail")
-	public String AccountingDetail() {
-		return "AccountingDetail";
 	}
 	
 	@PostMapping("/AccountingList/delete")
@@ -75,4 +80,43 @@ public class AccountingController {
 			return listPage(model, request, 1);
 		}
 	 }	
+	
+	@GetMapping("/AccountingDetail")
+	public String AccountingDetail(Model model) {
+		
+		AccountingInfo newAccounting = new AccountingInfo();
+		model.addAttribute("newAccounting", newAccounting);
+		
+		List<String> listInOut = Arrays.asList("0", "1");
+	    model.addAttribute("listInOut", listInOut);
+		
+		return "AccountingDetail";
+	}
+	
+	@PostMapping("/AccountingDetail/add")
+	public String saveCategory(@Validated @ModelAttribute("newAccounting") AccountingInfo newAccounting, BindingResult result, Model model, HttpServletRequest request, Map<String,Object> map) {
+		
+		Object current = request.getSession().getAttribute("loginUser");
+		
+		if (result.hasErrors()) {
+            List<String> errorList = new ArrayList<String>();
+            for (ObjectError error : result.getAllErrors()) {
+                errorList.add(error.getDefaultMessage());
+            }
+            model.addAttribute("validationError", errorList);
+            return "AccountingDetail";
+        }else {
+        	accountingService.saveAccountingInfo(newAccounting);
+    		return listPage(model, request, 1);
+        }
+	}
+	
+	@GetMapping("/AccountingList/edit/{id}")
+	public ModelAndView editPage(@PathVariable("id") int id) {
+	    ModelAndView mav = new ModelAndView("AccountingDetail");
+	    AccountingInfo accountingnfo = accountingService.get(id);
+	    mav.addObject("newAccounting", accountingnfo);
+	    
+	    return mav;
+	}
 }
