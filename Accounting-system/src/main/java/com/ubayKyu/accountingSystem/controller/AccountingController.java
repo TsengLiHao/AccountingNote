@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ubayKyu.accountingSystem.entity.AccountingInfo;
 import com.ubayKyu.accountingSystem.entity.CategoryInfo;
 import com.ubayKyu.accountingSystem.repository.AccountingRepository;
+import com.ubayKyu.accountingSystem.repository.CategoryRepository;
 import com.ubayKyu.accountingSystem.service.AccountingService;
 import com.ubayKyu.accountingSystem.service.CategoryService;
 
@@ -38,6 +39,9 @@ public class AccountingController {
 	
 	@Autowired
 	private AccountingService accountingService;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	
 	@RequestMapping("/AccountingList")
@@ -82,21 +86,20 @@ public class AccountingController {
 	 }	
 	
 	@GetMapping("/AccountingDetail")
-	public String AccountingDetail(Model model) {
+	public String AccountingDetail(Model model, HttpServletRequest request) {
 		
 		AccountingInfo newAccounting = new AccountingInfo();
 		model.addAttribute("newAccounting", newAccounting);
 		
-		List<String> listInOut = Arrays.asList("0", "1");
-	    model.addAttribute("listInOut", listInOut);
+		dropdownlist(model, request);
 		
 		return "AccountingDetail";
 	}
 	
 	@PostMapping("/AccountingDetail/add")
-	public String saveCategory(@Validated @ModelAttribute("newAccounting") AccountingInfo newAccounting, BindingResult result, Model model, HttpServletRequest request, Map<String,Object> map) {
+	public String saveCategory(@Validated @ModelAttribute("newAccounting") AccountingInfo newAccounting, BindingResult result, Model model, HttpServletRequest request) {
 		
-		Object current = request.getSession().getAttribute("loginUser");
+		dropdownlist(model, request);
 		
 		if (result.hasErrors()) {
             List<String> errorList = new ArrayList<String>();
@@ -104,19 +107,31 @@ public class AccountingController {
                 errorList.add(error.getDefaultMessage());
             }
             model.addAttribute("validationError", errorList);
-            return "AccountingDetail";
+            return "/AccountingDetail";
         }else {
         	accountingService.saveAccountingInfo(newAccounting);
     		return listPage(model, request, 1);
         }
-	}
+	} 
 	
 	@GetMapping("/AccountingList/edit/{id}")
-	public ModelAndView editPage(@PathVariable("id") int id) {
+	public ModelAndView editPage(@PathVariable("id") int id, Model model, HttpServletRequest request) {
 	    ModelAndView mav = new ModelAndView("AccountingDetail");
 	    AccountingInfo accountingnfo = accountingService.get(id);
 	    mav.addObject("newAccounting", accountingnfo);
 	    
+	    dropdownlist(model, request);
+	    
 	    return mav;
+	}
+	
+	public void dropdownlist(Model model, HttpServletRequest request) {
+		
+		List<String> listInOut = Arrays.asList("1", "0");
+	    model.addAttribute("listInOut", listInOut);
+	    
+	    Object current = request.getSession().getAttribute("loginUser");
+	    List<String> listCategoryName = categoryRepository.ListOfcategoryName(current.toString());
+	    model.addAttribute("listCategoryName", listCategoryName);
 	}
 }

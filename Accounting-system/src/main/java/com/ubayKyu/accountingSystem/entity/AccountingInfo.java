@@ -1,6 +1,7 @@
 package com.ubayKyu.accountingSystem.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -23,34 +25,35 @@ public class AccountingInfo {
 
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public Integer ID;
+	public int ID;
 	
 	public String USERID;
 	
 	@NotEmpty(message = "請輸入標題名稱")
 	public String Caption;
 	
-	@NotEmpty(message = "請輸入金額")
 	@Min(value = 1, message="輸入金額不可小於1")
 	@Max(value = 10000000, message="輸入金額不可大於1千萬")
-	public Integer Amount;
+	@Column(nullable = false)
+	@NotNull(message = "請輸入金額")
+	public int Amount;
 	
 	public Integer ACTTYPE;
 	
 	@Column(nullable = false)
-	public Date CREATEDATE;
+	public LocalDateTime CREATEDATE;
 	
 	@PrePersist
 	private void onCreate(){
-		CREATEDATE = new Date();
+		CREATEDATE = LocalDateTime.now();
 	}
 	
 	public String Body;
 	public String CATEGORYNAME;
-	public Integer getID() {
+	public int getID() {
 		return ID;
 	}
-	public void setID(Integer iD) {
+	public void setID(int iD) {
 		ID = iD;
 	}
 	public String getUSERID() {
@@ -65,10 +68,10 @@ public class AccountingInfo {
 	public void setCaption(String caption) {
 		Caption = caption;
 	}
-	public Integer getAmount() {
+	public int getAmount() {
 		return Amount;
 	}
-	public void setAmount(Integer amount) {
+	public void setAmount(int amount) {
 		Amount = amount;
 	}
 	public Integer getACTTYPE() {
@@ -77,10 +80,10 @@ public class AccountingInfo {
 	public void setACTTYPE(Integer aCTTYPE) {
 		ACTTYPE = aCTTYPE;
 	}
-	public Date getCREATEDATE() {
+	public LocalDateTime getCREATEDATE() {
 		return CREATEDATE;
 	}
-	public void setCREATEDATE(Date cREATEDATE) {
+	public void setCREATEDATE(LocalDateTime cREATEDATE) {
 		CREATEDATE = cREATEDATE;
 	}
 	public String getBody() {

@@ -19,11 +19,69 @@
 				<div class="container-fluid px-4">
 					<h2 class="mt-4">流水帳管理</h2>
 					<ol class="breadcrumb mb-4">
-						<li class="breadcrumb-item"><a th:href="@{AccountingList}">流水帳紀錄</a></li>
+						<li class="breadcrumb-item"><a th:href="@{/AccountingList}">流水帳紀錄</a></li>
 						<li class="breadcrumb-item active">流水帳管理</li>
 					</ol>
 				</div>
-				
+				<div class="container">
+					<form th:action="@{/AccountingDetail/add}" th:object="${newAccounting}"
+						th:method="post">
+						<table>
+						    <tr>
+								<th>收/支</th>
+								<th></th>
+								<td>
+								<select th:field="*{ACTTYPE}">
+										<option th:each="InOut : ${listInOut}" th:value="${InOut}"
+											th:text="${InOut == '0'} ? 'Out' : 'IN'"></option>
+								</select>
+								</td>
+							</tr>
+							<tr>
+								<th>分類</th>
+								<th></th>
+								<td class="form-group">
+								<select th:field="*{CATEGORYNAME}">
+								        <option value="" >未分類</option>
+										<option th:each="CategoryName : ${listCategoryName}" th:value="${CategoryName}"
+											th:text="${CategoryName}"></option>
+								</select>
+								</td>
+							</tr>
+							<tr>
+								<th>金額</th>
+								<th style="color: red">※</th>
+								<td><input type="number" th:field="*{Amount}" name="Amount"></td>
+							</tr>
+							<tr>
+								<th>標題</th>
+								<th style="color: red">※</th>
+								<td><input type="text" th:field="*{Caption}" name="Caption"></td>
+							</tr>
+							<tr>
+								<th class="cell_title">備註</th>
+								<th></th>
+								<td><textarea rows="5" cols="20" name="description"
+										th:field="*{Body}" placeholder="Comment text"></textarea></td>
+							</tr>
+						</table>
+						<table>
+							<tr th:if="${validationError}"
+								th:each="error : ${validationError}">
+								<td style="color: red;" th:text="${error}"></td>
+							</tr>
+						</table>
+						<span th:each="i:${newAccounting}">
+						<input type="hidden" th:field="*{ID}" th:if="${i.ID != null}">
+						<input type="hidden" th:field="*{CREATEDATE}" th:if="${i.CREATEDATE != null}">
+						</span>
+						<input type="hidden" th:value="${session.loginUser}" id="USERID" name="USERID">
+						<br>
+						<div class="btn_area_center">
+							<input type="submit" value="save">
+						</div>
+					</form>
+				</div>
 			</main>
 		</div>
 	</div>

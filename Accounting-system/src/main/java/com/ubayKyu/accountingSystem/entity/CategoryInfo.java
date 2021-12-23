@@ -34,7 +34,7 @@ public class CategoryInfo {
 
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public Integer CATEGORYID;
+	public int CATEGORYID;
 	
 	@NotEmpty(message = "請輸入分類標題名稱")
     @Size(max = 20, message = "輸入字數限制為20字")
@@ -53,10 +53,10 @@ public class CategoryInfo {
 	@Column(nullable = true)
 	public String Body;
 	
-	public Integer getCATEGORYID() {
+	public int getCATEGORYID() {
 		return CATEGORYID;
 	}
-	public void setCATEGORYID(Integer cATEGORYID) {
+	public void setCATEGORYID(int cATEGORYID) {
 		CATEGORYID = cATEGORYID;
 	}
 	public String getCATEGORYNAME() {
