@@ -49,8 +49,8 @@ public class UserInfoController {
 	}
 	@GetMapping("/Default")
 	public String Default_page(Model model) {
-		model.addAttribute("newestDate", userInfoRepository.newest());
-		model.addAttribute("latestDate", userInfoRepository.latest());
+		model.addAttribute("newestDate", accountingRepository.newest());
+		model.addAttribute("latestDate", accountingRepository.latest());
 		model.addAttribute("memberCount", userInfoRepository.memberCount());
 		model.addAttribute("accountingCount", accountingRepository.accountingCount());
 		return "Default";

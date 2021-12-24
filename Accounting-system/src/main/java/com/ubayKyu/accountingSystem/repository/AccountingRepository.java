@@ -1,5 +1,6 @@
 package com.ubayKyu.accountingSystem.repository;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.context.annotation.Bean;
@@ -11,10 +12,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.ubayKyu.accountingSystem.entity.AccountingInfo;
+import com.ubayKyu.accountingSystem.entity.UserInfo;
 
 @Repository
 public interface AccountingRepository extends JpaRepository<AccountingInfo,Integer>{
 
+	@Query(value = "SELECT TOP　(1) * FROM Accounting ORDER BY CREATEDATE ASC", nativeQuery = true)
+    public List<AccountingInfo> newest();
+	
+	@Query(value = "SELECT TOP　(1) * FROM Accounting ORDER BY CREATEDATE DESC", nativeQuery = true)
+    public List<AccountingInfo> latest();
+	
 	@Query(value = "SELECT COUNT(*) as Count FROM ACCOUNTING ", nativeQuery = true)
 	public Long accountingCount();
     
