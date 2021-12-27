@@ -23,6 +23,41 @@
 						<li class="breadcrumb-item active">個人資訊</li>
 					</ol>
 				</div>
+				<div class="container">
+					<form th:action="@{/UserProfile/edit}" th:object="${editProfile}"
+						th:method="post">
+						<table border="1">
+							<tr>
+								<th>帳號</th>
+								<td><input type="text" th:field="*{Account}" name="Account" readonly="readonly" ></td>
+							</tr>
+							<tr>
+								<th>姓名</th>
+								<td><input type="text" th:field="*{Name}" name="Name"></td>
+							</tr>
+							<tr>
+								<th>Email</th>
+								<td><input type="email" th:field="*{Email}" name="Email"></td>
+							</tr>
+						</table>
+						<table>
+							<tr th:if="${validationError}"
+								th:each="error : ${validationError}">
+								<td style="color: red;" th:text="${error}"></td>
+							</tr>
+						</table>
+						<span th:each="i:${editProfile}">
+						<input type="hidden" th:field="*{ID}" th:if="${i.ID != null}">
+						<input type="hidden" th:field="*{CREATEDATE}" th:if="${i.CREATEDATE != null}">
+						<input type="hidden" th:field="*{PWD}" th:if="${i.PWD != null}">
+						<input type="hidden" th:field="*{USERLEVEL}" th:if="${i.USERLEVEL != null}">
+						</span>
+						<br>
+						<div class="btn_area_center">
+							<input type="submit" value="存檔">
+						</div>
+					</form>
+				</div>
 			</main>
 		</div>
 	</div>

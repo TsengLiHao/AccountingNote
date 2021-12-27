@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,10 +35,10 @@ public class LoginController {
 		}
 	}
 	
-	@PostMapping("/Login")
+	@PostMapping("/LoginSuccese")
 	public String UserLogin(@RequestParam("account") String account,
 			                 @RequestParam("password") String password,
-			                 Map<String,Object> map, HttpSession session) {
+			                 Map<String,Object> map, HttpSession session, Model model, HttpServletRequest request) {
 		
 		if(userInfoRepository.userInfo(account) != null) {
 			
@@ -47,6 +48,11 @@ public class LoginController {
 			if(userAccount.equals(account) && userPWD.equals(password)){
 				session.setAttribute("loginLevel", userInfoRepository.userInfo(account).USERLEVEL);
 				session.setAttribute("loginUser", userInfoRepository.userInfo(account).ID);
+				
+				Object current = request.getSession().getAttribute("loginUser");
+				UserInfo userProfile = userInfoRepository.userInfoByID(current.toString());
+				model.addAttribute("editProfile", userProfile);
+				
 				return "UserProfile";
 			}
 	        else {

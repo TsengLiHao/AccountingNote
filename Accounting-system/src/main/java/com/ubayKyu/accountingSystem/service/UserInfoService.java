@@ -3,8 +3,12 @@
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ubayKyu.accountingSystem.entity.CategoryInfo;
 import com.ubayKyu.accountingSystem.entity.UserInfo;
 import com.ubayKyu.accountingSystem.repository.UserInfoRepository;
 
@@ -26,8 +30,12 @@ public class UserInfoService {
 		return repository.findAllById(ids);
 	}
 	
-	public String deleteUserInfo(String id) {
+	public void deleteUserInfo(String id) {
 		repository.deleteById(id);
-		return "Deleted!";
+	}
+	
+	public Page<UserInfo> listUserInfos(int pageNumber) {
+		Pageable pageable = PageRequest.of(pageNumber-1, 10);
+		return repository.findAll(pageable);
 	}
 }

@@ -57,7 +57,7 @@ public class AccountingController {
 	public String listPage(Model model, HttpServletRequest request, @PathVariable("pageNumber") int currentPage) {
 		
 		Object current = request.getSession().getAttribute("loginUser");
-		Page<AccountingInfo> page = accountingRepository.accounting(current.toString(), PageRequest.of(currentPage-1, 3));
+		Page<AccountingInfo> page = accountingRepository.accounting(current.toString(), PageRequest.of(currentPage-1, 10));
 		List<AccountingInfo> listAccounting = page.getContent();
 		int totalPages = page.getTotalPages();
 		

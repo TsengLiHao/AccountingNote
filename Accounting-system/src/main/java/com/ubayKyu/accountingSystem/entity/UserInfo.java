@@ -8,7 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="USERSINFO")
@@ -21,13 +24,25 @@ public class UserInfo {
 	//@Column(name="PWD", length=50, nullable=false, unique=false)
 	public String PWD;
 	//@Column(name="NAME", length=50, nullable=false, unique=false)
+	@NotEmpty(message = "請輸入姓名")
+	@Size(max = 20, message = "輸入字數限制為20字")
 	public String Name;
 	//@Column(name="EMAIL", length=50, nullable=false, unique=false)
+	@NotEmpty(message = "請輸入Email")
+	@Size(max = 100, message = "輸入字數限制為100字")
 	public String Email;
 	//@Column(name="USER_LEVEL", length=50, nullable=false, unique=false)
 	public Integer USERLEVEL;
 	//@Column(name="CREATE_DATE", length=50, nullable=false, unique=false)
-	public Date CREATEDATE;
+	
+	@Column(nullable = false)
+	public LocalDateTime CREATEDATE;
+	
+	@PrePersist
+	private void onCreate(){
+		CREATEDATE = LocalDateTime.now();
+	}
+	
 	public String getID() {
 		return ID;
 	}
@@ -64,10 +79,10 @@ public class UserInfo {
 	public void setUSERLEVEL(Integer uSERLEVEL) {
 		USERLEVEL = uSERLEVEL;
 	}
-	public Date getCREATEDATE() {
+	public LocalDateTime getCREATEDATE() {
 		return CREATEDATE;
 	}
-	public void setCREATEDATE(Date cREATEDATE) {
+	public void setCREATEDATE(LocalDateTime cREATEDATE) {
 		CREATEDATE = cREATEDATE;
 	}
 	
