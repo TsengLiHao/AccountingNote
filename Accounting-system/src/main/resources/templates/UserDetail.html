@@ -23,6 +23,54 @@
 						<li class="breadcrumb-item active">會員管理</li>
 					</ol>
 				</div>
+				<div class="container">
+					<form th:action="@{/UserDetail/add}" th:object="${newAccounting}"
+						th:method="post">
+						<table>
+						    <tr>
+								<th>帳號</th>
+								<th style="color: red">※</th>
+								<td><input type="number" th:field="*{Amount}" name="Amount"></td>
+							</tr>
+							<tr>
+								<th>姓名</th>
+								<th style="color: red">※</th>
+								<td><input type="number" th:field="*{Amount}" name="Amount"></td>
+							</tr>
+							<tr>
+								<th>Email</th>
+								<th style="color: red">※</th>
+								<td><input type="number" th:field="*{Amount}" name="Amount"></td>
+							</tr>
+							<tr>
+								<th>等級</th>
+								<th></th>
+								<td class="form-group">
+								<select th:field="*{CATEGORYNAME}">
+								        <option value="" >未分類</option>
+										<option th:each="CategoryName : ${listCategoryName}" th:value="${CategoryName}"
+											th:text="${CategoryName}"></option>
+								</select>
+								</td>
+							</tr>
+						</table>
+						<table>
+							<tr th:if="${validationError}"
+								th:each="error : ${validationError}">
+								<td style="color: red;" th:text="${error}"></td>
+							</tr>
+						</table>
+						<span th:each="i:${newAccounting}">
+						<input type="hidden" th:field="*{ID}" th:if="${i.ID != null}">
+						<input type="hidden" th:field="*{CREATEDATE}" th:if="${i.CREATEDATE != null}">
+						</span>
+						<input type="hidden" th:value="${session.loginUser}" id="USERID" name="USERID">
+						<br>
+						<div class="btn_area_center">
+							<input type="submit" value="save">
+						</div>
+					</form>
+				</div>
 			</main>
 		</div>
 	</div>

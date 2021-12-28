@@ -3,10 +3,13 @@ package com.ubayKyu.accountingSystem.repository;
 import java.util.List;
 import java.util.Map;
 
+import javax.transaction.Transactional;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -38,4 +41,9 @@ public interface AccountingRepository extends JpaRepository<AccountingInfo,Integ
 			+ "     -(SELECT ISNULL(SUM(Amount),0) FROM Accounting  WHERE ActType='0' AND UserID = ?1 "
 			+ "      AND CreateDate >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1) AND  CreateDate <= EOMONTH(GETDATE()))　AS Total ", nativeQuery = true)
 	public Long accountingMonthTotal(String userID);
+
+	@Modifying
+	@Transactional
+	@Query(value = "DELETE FROM ACCOUNTING WHERE USERID = ?1", nativeQuery = true)
+    public void deleteUser(String userID);
 }

@@ -72,8 +72,8 @@
 							</tr>
 						</table>
 						<span th:each="i:${newAccounting}">
-						<input th:field="*{ID}" th:if="${i.ID != null}">
-						<input th:field="*{CREATEDATE}" th:if="${i.CREATEDATE != null}">
+						<input type="hidden" th:field="*{ID}" th:if="${i.ID != null}">
+						<input type="hidden" th:field="*{CREATEDATE}" th:if="${i.CREATEDATE != null}">
 						</span>
 						<input type="hidden" th:value="${session.loginUser}" id="USERID" name="USERID">
 						<br>

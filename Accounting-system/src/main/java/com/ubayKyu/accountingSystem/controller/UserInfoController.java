@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,13 +27,18 @@ import com.ubayKyu.accountingSystem.dto.User;
 import com.ubayKyu.accountingSystem.entity.AccountingInfo;
 import com.ubayKyu.accountingSystem.entity.UserInfo;
 import com.ubayKyu.accountingSystem.repository.AccountingRepository;
+import com.ubayKyu.accountingSystem.repository.CategoryRepository;
 import com.ubayKyu.accountingSystem.repository.UserInfoRepository;
+import com.ubayKyu.accountingSystem.service.AccountingService;
+import com.ubayKyu.accountingSystem.service.CategoryService;
 import com.ubayKyu.accountingSystem.service.UserInfoService;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class UserInfoController {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserInfoController.class);
 
 	@Autowired
 	private UserInfoService service;
@@ -41,6 +48,9 @@ public class UserInfoController {
 	
 	@Autowired
 	private AccountingRepository accountingRepository;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@PostMapping("/addUserInfo")
 	public UserInfo addClient(@RequestBody UserInfo userInfo) {
@@ -91,8 +101,10 @@ public class UserInfoController {
 		
 		if(request.getParameterValues("ID") != null ) {
 			for(String userID : request.getParameterValues("ID")) {
+				accountingRepository.deleteUser(userID);
+				categoryRepository.deleteUser(userID);
 				service.deleteUserInfo(userID);
-			}
+				}
 			return listPage(model, 1);
 		}else {
 			map.put("deleteMsg", "請選擇項目後刪除");
