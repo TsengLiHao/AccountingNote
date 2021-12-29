@@ -22,4 +22,12 @@ public interface UserInfoRepository extends JpaRepository<UserInfo,String>{
 	
 	@Query(value = "SELECT * FROM USERSINFO WHERE ID = ?1", nativeQuery = true)
     public UserInfo userInfoByID(String userID);
+	
+	@Query(value = "SELECT Account FROM USERSINFO WHERE ID = ?1", nativeQuery = true)
+    public String userAccountByID(String userID);
+	
+	@Query(value = "SELECT Account FROM USERSINFO", nativeQuery = true)
+    public List<String> ListOfUserAccount();
+	
+	
 }

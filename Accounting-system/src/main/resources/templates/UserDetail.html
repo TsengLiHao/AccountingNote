@@ -24,32 +24,34 @@
 					</ol>
 				</div>
 				<div class="container">
-					<form th:action="@{/UserDetail/add}" th:object="${newAccounting}"
+					<form th:action="@{/UserDetail/add}" th:object="${newUser}"
 						th:method="post">
 						<table>
-						    <tr>
+						    <tr th:each="i:${newUser}">
 								<th>帳號</th>
 								<th style="color: red">※</th>
-								<td><input type="number" th:field="*{Amount}" name="Amount"></td>
+								<td>
+								<input type="text" th:field="*{Account}" name="Account" th:if="${i.Account == null}">
+								<input type="text" th:field="*{Account}" name="Account" th:if="${i.Account != null}" readonly="readonly">
+								</td>
 							</tr>
 							<tr>
 								<th>姓名</th>
 								<th style="color: red">※</th>
-								<td><input type="number" th:field="*{Amount}" name="Amount"></td>
+								<td><input type="text" th:field="*{Name}" name="Name"></td>
 							</tr>
 							<tr>
 								<th>Email</th>
 								<th style="color: red">※</th>
-								<td><input type="number" th:field="*{Amount}" name="Amount"></td>
+								<td><input type="email" th:field="*{Email}" name="Email"></td>
 							</tr>
 							<tr>
 								<th>等級</th>
 								<th></th>
 								<td class="form-group">
-								<select th:field="*{CATEGORYNAME}">
-								        <option value="" >未分類</option>
-										<option th:each="CategoryName : ${listCategoryName}" th:value="${CategoryName}"
-											th:text="${CategoryName}"></option>
+								<select th:field="*{USERLEVEL}">
+										<option th:each="level : ${listLevel}" th:value="${level}"
+											th:text="${level == '0'} ? '管理者' : '一般會員'"></option>
 								</select>
 								</td>
 							</tr>
@@ -60,11 +62,12 @@
 								<td style="color: red;" th:text="${error}"></td>
 							</tr>
 						</table>
-						<span th:each="i:${newAccounting}">
+						<p style="color:red" th:text="${renameMsgOfAccount}" th:if="${not #strings.isEmpty(renameMsgOfAccount)}"></p>
+						<span th:each="i:${newUser}">
 						<input type="hidden" th:field="*{ID}" th:if="${i.ID != null}">
-						<input type="hidden" th:field="*{CREATEDATE}" th:if="${i.CREATEDATE != null}">
+						建立時間 <input type="text" th:field="*{CREATEDATE}" th:if="${i.CREATEDATE != null}" readonly="readonly">
 						</span>
-						<input type="hidden" th:value="${session.loginUser}" id="USERID" name="USERID">
+						<input type="hidden" th:value="12345678" id="PWD" name="PWD">
 						<br>
 						<div class="btn_area_center">
 							<input type="submit" value="save">

@@ -97,7 +97,7 @@ public class AccountingController {
 	}
 	
 	@PostMapping("/AccountingDetail/add")
-	public String saveCategory(@Validated @ModelAttribute("newAccounting") AccountingInfo newAccounting, BindingResult result, Model model, HttpServletRequest request) {
+	public String saveAccounting(@Validated @ModelAttribute("newAccounting") AccountingInfo newAccounting, BindingResult result, Model model, HttpServletRequest request) {
 		
 		dropdownlist(model, request);
 		
@@ -117,8 +117,8 @@ public class AccountingController {
 	@GetMapping("/AccountingList/edit/{id}")
 	public ModelAndView editPage(@PathVariable("id") int id, Model model, HttpServletRequest request) {
 	    ModelAndView mav = new ModelAndView("AccountingDetail");
-	    AccountingInfo accountingnfo = accountingService.get(id);
-	    mav.addObject("newAccounting", accountingnfo);
+	    AccountingInfo accountingInfo = accountingService.get(id);
+	    mav.addObject("newAccounting", accountingInfo);
 	    
 	    dropdownlist(model, request);
 	    

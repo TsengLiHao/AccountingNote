@@ -1,6 +1,8 @@
 package com.ubayKyu.accountingSystem.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ubayKyu.accountingSystem.dto.User;
@@ -99,8 +102,16 @@ public class UserInfoController {
 	@PostMapping("/UserList/delete")
 	public String deleteProduct(Map<String,Object> map, HttpServletRequest request, Model model) {
 		
+		Object current = request.getSession().getAttribute("loginUser");
+		String admin = userInfoRepository.userAccountByID(current.toString());
+		LocalDate currentDate = LocalDate.now();
+		
 		if(request.getParameterValues("ID") != null ) {
 			for(String userID : request.getParameterValues("ID")) {
+				
+				String deleteOfUser = userInfoRepository.userAccountByID(userID);
+				LOGGER.info("管理者" + admin + "於" + currentDate + "刪除使用者" + deleteOfUser);
+				
 				accountingRepository.deleteUser(userID);
 				categoryRepository.deleteUser(userID);
 				service.deleteUserInfo(userID);
@@ -111,6 +122,56 @@ public class UserInfoController {
 			return listPage(model, 1);
 		}
 	 }	
+
+	@GetMapping("/UserDetail")
+	public String AccountingDetail(Model model, HttpServletRequest request) {
+		
+		dropdownlist(model, request);
+		
+		UserInfo newUser = new UserInfo();
+		model.addAttribute("newUser", newUser);
+		
+		return "UserDetail";
+	}
+	
+	@PostMapping("/UserDetail/add")
+	public String saveUser(@Validated @ModelAttribute("newUser") UserInfo newUser, BindingResult result, Model model, Map<String,Object> map, @RequestParam("Account") String account, HttpServletRequest request) {
+		
+		List<String> ListOfAccount = userInfoRepository.ListOfUserAccount();
+		dropdownlist(model, request);
+		
+		if (result.hasErrors()) {
+            List<String> errorList = new ArrayList<String>();
+            for (ObjectError error : result.getAllErrors()) {
+                errorList.add(error.getDefaultMessage());
+            }
+            model.addAttribute("validationError", errorList);
+            return "/UserDetail";
+        }else if(ListOfAccount.contains(account)) {
+        	map.put("renameMsgOfAccount", "標題名稱重複,請重新命名");
+			return "UserDetail";
+        }else {
+        	service.saveUserInfo(newUser);
+    		return listPage(model, 1);
+        }
+	} 
+	
+	@GetMapping("/UserList/edit/{userID}")
+	public ModelAndView editPage(@PathVariable("userID") String userID, Model model, HttpServletRequest request) {
+	    ModelAndView mav = new ModelAndView("UserDetail");
+	    UserInfo userInfo = service.get(userID);
+	    mav.addObject("newUser", userInfo);
+	    
+	    dropdownlist(model, request);
+	    
+	    return mav;
+	}
+	
+    public void dropdownlist(Model model, HttpServletRequest request) {
+		
+		List<String> listLevel = Arrays.asList("1", "0");
+	    model.addAttribute("listLevel", listLevel);
+	}
 	
 	@GetMapping("/UserProfile")
 	public String UserProfile(Model model, HttpServletRequest request) {

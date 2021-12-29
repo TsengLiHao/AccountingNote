@@ -20,6 +20,8 @@ public class UserInfo {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public String ID;
 	
+	@NotEmpty(message = "請輸入帳號")
+	@Size(max = 20, message = "輸入字數限制為20字")
 	public String Account; 
 	//@Column(name="PWD", length=50, nullable=false, unique=false)
 	public String PWD;
