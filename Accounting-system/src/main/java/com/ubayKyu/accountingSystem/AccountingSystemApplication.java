@@ -32,7 +32,7 @@ public class AccountingSystemApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		List<AccountingInfo> category = AccountingRepo.findAll();
+		List<UserInfo> category = UserInfoRepo.findAll();
 		
 		category.forEach(System.out :: println);
 		

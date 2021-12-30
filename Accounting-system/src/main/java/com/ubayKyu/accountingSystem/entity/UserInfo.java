@@ -2,6 +2,7 @@ package com.ubayKyu.accountingSystem.entity;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name="USERSINFO")
 public class UserInfo {
@@ -39,6 +43,8 @@ public class UserInfo {
 	
 	@Column(nullable = false)
 	public LocalDateTime CREATEDATE;
+	
+	public LocalDateTime REVISEDATE;
 	
 	@PrePersist
 	private void onCreate(){
@@ -86,6 +92,12 @@ public class UserInfo {
 	}
 	public void setCREATEDATE(LocalDateTime cREATEDATE) {
 		CREATEDATE = cREATEDATE;
+	}
+	public LocalDateTime getREVISEDATE() {
+		return REVISEDATE;
+	}
+	public void setREVISEDATE(LocalDateTime rEVISEDATE) {
+		REVISEDATE = rEVISEDATE;
 	}
 	
 }

@@ -1,10 +1,12 @@
 package com.ubayKyu.accountingSystem.controller;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -78,18 +80,39 @@ public class UserInfoController {
 		model.addAttribute("accountingCount", accountingRepository.accountingCount());
 		return "Default";
 	}
+//	@RequestMapping("/UserList")
+//	public String UserList(Model model) {
+//		
+//		return listPage(model, 1);
+//	}
+//	
+//	@GetMapping("/UserList/page/{pageNumber}")
+//	public String listPage(Model model, @PathVariable("pageNumber") int currentPage) {
+//		
+//		Page<UserInfo> page = service.listUserInfos(currentPage);
+//		List<UserInfo> listUser = page.getContent();
+//		model.addAttribute("userInfo", listUser);
+//		int totalPages = page.getTotalPages();
+//		
+//		model.addAttribute("currentPage", currentPage);
+//		model.addAttribute("users", listUser);
+//		model.addAttribute("totalPages", totalPages);
+//		
+//		return "UserList";
+//	}
+	
 	@RequestMapping("/UserList")
-	public String UserList(Model model) {
+	public String AccountingList(Model model, HttpServletRequest request) {
 		
-		return listPage(model, 1);
+		return listPage(model, request, 1);
 	}
 	
 	@GetMapping("/UserList/page/{pageNumber}")
-	public String listPage(Model model, @PathVariable("pageNumber") int currentPage) {
+	public String listPage(Model model, HttpServletRequest request, @PathVariable("pageNumber") int currentPage) {
 		
-		Page<UserInfo> page = service.listUserInfos(currentPage);
+		Object current = request.getSession().getAttribute("loginUser");
+		Page<UserInfo> page = userInfoRepository.userInfo(current.toString(), PageRequest.of(currentPage-1, 10));
 		List<UserInfo> listUser = page.getContent();
-		model.addAttribute("userInfo", listUser);
 		int totalPages = page.getTotalPages();
 		
 		model.addAttribute("currentPage", currentPage);
@@ -116,10 +139,10 @@ public class UserInfoController {
 				categoryRepository.deleteUser(userID);
 				service.deleteUserInfo(userID);
 				}
-			return listPage(model, 1);
+			return listPage(model, request, 1);
 		}else {
 			map.put("deleteMsg", "請選擇項目後刪除");
-			return listPage(model, 1);
+			return listPage(model, request, 1);
 		}
 	 }	
 
@@ -128,17 +151,19 @@ public class UserInfoController {
 		
 		dropdownlist(model, request);
 		
-		UserInfo newUser = new UserInfo();
-		model.addAttribute("newUser", newUser);
-		
 		return "UserDetail";
 	}
 	
 	@PostMapping("/UserDetail/add")
 	public String saveUser(@Validated @ModelAttribute("newUser") UserInfo newUser, BindingResult result, Model model, Map<String,Object> map, @RequestParam("Account") String account, HttpServletRequest request) {
 		
-		List<String> ListOfAccount = userInfoRepository.ListOfUserAccount();
+		List<String> ListOfAccount = userInfoRepository.ListOfUserAccount(account);
 		dropdownlist(model, request);
+		
+		Object current = request.getSession().getAttribute("loginUser");
+		
+		String uuid = UUID.randomUUID().toString();
+		model.addAttribute("uuid", uuid);
 		
 		if (result.hasErrors()) {
             List<String> errorList = new ArrayList<String>();
@@ -148,11 +173,12 @@ public class UserInfoController {
             model.addAttribute("validationError", errorList);
             return "/UserDetail";
         }else if(ListOfAccount.contains(account)) {
-        	map.put("renameMsgOfAccount", "標題名稱重複,請重新命名");
+        	map.put("renameMsgOfAccount", "帳號名稱重複,請重新命名");
 			return "UserDetail";
         }else {
         	service.saveUserInfo(newUser);
-    		return listPage(model, 1);
+        	userInfoRepository.reviseDate(current.toString());
+    		return listPage(model, request, 1);
         }
 	} 
 	
@@ -171,6 +197,9 @@ public class UserInfoController {
 		
 		List<String> listLevel = Arrays.asList("1", "0");
 	    model.addAttribute("listLevel", listLevel);
+	    
+	    UserInfo newUser = new UserInfo();
+		model.addAttribute("newUser", newUser);
 	}
 	
 	@GetMapping("/UserProfile")
@@ -186,6 +215,8 @@ public class UserInfoController {
 	@PostMapping("/UserProfile/edit")
 	public String saveCategory(@Validated @ModelAttribute("editProfile") UserInfo userProfile, BindingResult result, Model model, HttpServletRequest request) {
 		
+		Object current = request.getSession().getAttribute("loginUser");
+		
 		if (result.hasErrors()) {
             List<String> errorList = new ArrayList<String>();
             for (ObjectError error : result.getAllErrors()) {
@@ -195,6 +226,7 @@ public class UserInfoController {
             return "/UserProfile";
         }else {
         	service.saveUserInfo(userProfile);
+        	userInfoRepository.reviseDate(current.toString());
     		return "/UserProfile";
         }
 	} 

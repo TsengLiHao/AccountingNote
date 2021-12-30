@@ -26,8 +26,8 @@
 				<div class="container">
 					<form th:action="@{/UserDetail/add}" th:object="${newUser}"
 						th:method="post">
-						<table>
-						    <tr th:each="i:${newUser}">
+						<table th:each="i:${newUser}">
+						    <tr>
 								<th>帳號</th>
 								<th style="color: red">※</th>
 								<td>
@@ -55,6 +55,16 @@
 								</select>
 								</td>
 							</tr>
+							<tr th:if="${i.CREATEDATE != null}">
+								<th>建立時間</th>
+								<th></th>
+								<td><input type="text" th:field="*{CREATEDATE}" readonly="readonly"></td>
+							</tr>
+							<tr th:if="${i.REVISEDATE != null}">
+								<th>修改時間</th>
+								<th></th>
+								<td><input type="text" th:field="*{REVISEDATE}" readonly="readonly"></td>
+							</tr>
 						</table>
 						<table>
 							<tr th:if="${validationError}"
@@ -65,7 +75,6 @@
 						<p style="color:red" th:text="${renameMsgOfAccount}" th:if="${not #strings.isEmpty(renameMsgOfAccount)}"></p>
 						<span th:each="i:${newUser}">
 						<input type="hidden" th:field="*{ID}" th:if="${i.ID != null}">
-						建立時間 <input type="text" th:field="*{CREATEDATE}" th:if="${i.CREATEDATE != null}" readonly="readonly">
 						</span>
 						<input type="hidden" th:value="12345678" id="PWD" name="PWD">
 						<br>
@@ -73,6 +82,7 @@
 							<input type="submit" value="save">
 						</div>
 					</form>
+						    <a th:href="@{/UserList}" class="button"><button>delete</button></a>
 				</div>
 			</main>
 		</div>
