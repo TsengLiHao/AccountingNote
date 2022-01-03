@@ -21,7 +21,6 @@ import lombok.Data;
 @Table(name="USERSINFO")
 public class UserInfo {
 	@Id 
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public String ID;
 	
 	@NotEmpty(message = "請輸入帳號")

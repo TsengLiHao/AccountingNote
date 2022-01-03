@@ -24,14 +24,16 @@ public class LoginController {
 	private UserInfoRepository userInfoRepository;
 	
 	@GetMapping("/Login")
-	public String Login(HttpServletRequest request) {
+	public String Login(HttpServletRequest request, Model model) {
 		
-		Object current = request.getSession().getAttribute("loginLevel");
+		Object current = request.getSession().getAttribute("loginUser");
+		UserInfo userProfile = userInfoRepository.userInfoByID(current.toString());
+		model.addAttribute("editProfile", userProfile);
 		
-		if(current == null) {
+		if(userProfile == null) {
 			return "Login";
 		}else {
-			return "UserProfile";
+			return "/UserProfile";
 		}
 	}
 	

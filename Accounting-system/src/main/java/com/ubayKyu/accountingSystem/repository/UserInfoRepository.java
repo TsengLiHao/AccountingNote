@@ -42,7 +42,11 @@ public interface UserInfoRepository extends JpaRepository<UserInfo,String>{
 	@Modifying
 	@Transactional
 	@Query(value = "UPDATE USERSINFO SET REVISEDATE = GETDATE() WHERE ID = ?1", nativeQuery = true)
-    public void reviseDate(String account);
+    public void reviseDateByID(String id);
 	
+	@Modifying
+	@Transactional
+	@Query(value = "UPDATE USERSINFO SET REVISEDATE = GETDATE() WHERE Account = ?1", nativeQuery = true)
+    public void reviseDateByAccount(String account);
 	
 }

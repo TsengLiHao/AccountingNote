@@ -5,7 +5,13 @@
 <meta charset="utf-8" />
 <title>UserList</title>
 </head>
-
+<style>
+div.delete{
+position: relative;
+  bottom: 45px;
+  left: 100px;
+}
+</style>
 <body>
 <div th:replace="Master :: html_header">
 	
@@ -27,7 +33,7 @@
 					<a th:href="@{/UserDetail}" class="button"><button>Add</button></a>
 				</div>
 				<form th:action="@{/UserList/delete}" th:method="post">
-				<div class="card-body">
+				<div class="delete">
 				<input type=submit value="Del" onclick="return confirm('確定要刪除嗎?')"><br>
 				</div>
 				<div class="container">

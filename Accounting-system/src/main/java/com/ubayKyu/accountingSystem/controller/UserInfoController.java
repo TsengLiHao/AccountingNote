@@ -149,7 +149,12 @@ public class UserInfoController {
 	@GetMapping("/UserDetail")
 	public String AccountingDetail(Model model, HttpServletRequest request) {
 		
+		UserInfo newUser = new UserInfo();
+		model.addAttribute("newUser", newUser);
+		
 		dropdownlist(model, request);
+		String uuid = UUID.randomUUID().toString();
+		model.addAttribute("newUUID", uuid);
 		
 		return "UserDetail";
 	}
@@ -162,22 +167,22 @@ public class UserInfoController {
 		
 		Object current = request.getSession().getAttribute("loginUser");
 		
-		String uuid = UUID.randomUUID().toString();
-		model.addAttribute("uuid", uuid);
+    	String uuid = UUID.randomUUID().toString();
+		model.addAttribute("newUUID", uuid);
 		
 		if (result.hasErrors()) {
             List<String> errorList = new ArrayList<String>();
             for (ObjectError error : result.getAllErrors()) {
                 errorList.add(error.getDefaultMessage());
-            }
+            } 
             model.addAttribute("validationError", errorList);
-            return "/UserDetail";
+            return "UserDetail";
         }else if(ListOfAccount.contains(account)) {
         	map.put("renameMsgOfAccount", "帳號名稱重複,請重新命名");
 			return "UserDetail";
         }else {
         	service.saveUserInfo(newUser);
-        	userInfoRepository.reviseDate(current.toString());
+        	userInfoRepository.reviseDateByAccount(account);
     		return listPage(model, request, 1);
         }
 	} 
@@ -197,9 +202,6 @@ public class UserInfoController {
 		
 		List<String> listLevel = Arrays.asList("1", "0");
 	    model.addAttribute("listLevel", listLevel);
-	    
-	    UserInfo newUser = new UserInfo();
-		model.addAttribute("newUser", newUser);
 	}
 	
 	@GetMapping("/UserProfile")
@@ -226,7 +228,7 @@ public class UserInfoController {
             return "/UserProfile";
         }else {
         	service.saveUserInfo(userProfile);
-        	userInfoRepository.reviseDate(current.toString());
+        	userInfoRepository.reviseDateByID(current.toString());
     		return "/UserProfile";
         }
 	} 

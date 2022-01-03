@@ -4,8 +4,15 @@
 <head th:replace="Master :: html_head">
 <meta charset="utf-8" />
 <title>UserDetail</title>
-</head>
 
+</head>
+<style>
+div.delete{
+position: relative;
+  bottom: 30px;
+  left: 100px;
+}
+</style>
 <body>
 <div th:replace="Master :: html_header">
 	
@@ -29,10 +36,12 @@
 						<table th:each="i:${newUser}">
 						    <tr>
 								<th>帳號</th>
-								<th style="color: red">※</th>
+								<th style="color: red"  th:if="${i.REVISEDATE == null}">※</th>
+								<th th:if="${i.REVISEDATE != null}"></th>
+								<th th:text="${i.Account}" th:if="${i.REVISEDATE != null}"></th>
 								<td>
-								<input type="text" th:field="*{Account}" name="Account" th:if="${i.Account == null}">
-								<input type="text" th:field="*{Account}" name="Account" th:if="${i.Account != null}" readonly="readonly">
+								<input type="text" th:field="*{Account}" name="Account" th:if="${i.REVISEDATE == null}">
+								<input type="hidden" th:field="*{Account}" name="Account" th:if="${i.REVISEDATE != null}" readonly="readonly">
 								</td>
 							</tr>
 							<tr>
@@ -58,12 +67,14 @@
 							<tr th:if="${i.CREATEDATE != null}">
 								<th>建立時間</th>
 								<th></th>
-								<td><input type="text" th:field="*{CREATEDATE}" readonly="readonly"></td>
+								<th th:text="${#temporals.format(i.CREATEDATE,'yyyy-MM-dd HH:mm:ss')}"></th>
+								<td><input type="hidden" th:field="*{CREATEDATE}" readonly="readonly"></td>
 							</tr>
 							<tr th:if="${i.REVISEDATE != null}">
 								<th>修改時間</th>
 								<th></th>
-								<td><input type="text" th:field="*{REVISEDATE}" readonly="readonly"></td>
+								<th th:text="${#temporals.format(i.REVISEDATE,'yyyy-MM-dd HH:mm:ss')}"></th>
+								<td><input type="hidden" th:field="*{REVISEDATE}" readonly="readonly"></td>
 							</tr>
 						</table>
 						<table>
@@ -75,6 +86,7 @@
 						<p style="color:red" th:text="${renameMsgOfAccount}" th:if="${not #strings.isEmpty(renameMsgOfAccount)}"></p>
 						<span th:each="i:${newUser}">
 						<input type="hidden" th:field="*{ID}" th:if="${i.ID != null}">
+						<input type="hidden" th:value="${newUUID}" id="ID" name="ID"  th:if="${i.ID == null}">
 						</span>
 						<input type="hidden" th:value="12345678" id="PWD" name="PWD">
 						<br>
@@ -82,7 +94,7 @@
 							<input type="submit" value="save">
 						</div>
 					</form>
-						    <a th:href="@{/UserList}" class="button"><button>delete</button></a>
+						<div class="delete"><a th:href="@{/UserList}" class="button"><button>delete</button></a></div>    
 				</div>
 			</main>
 		</div>

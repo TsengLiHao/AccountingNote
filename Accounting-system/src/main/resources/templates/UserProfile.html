@@ -48,7 +48,6 @@
 						</table>
 						<span th:each="i:${editProfile}">
 						<input type="hidden" th:field="*{ID}" th:if="${i.ID != null}">
-						<input  th:value="${uuid}" id="ID" name="ID" th:if="${i.ID == null}">
 						<input type="hidden" th:field="*{CREATEDATE}" th:if="${i.CREATEDATE != null}">
 						<input type="hidden" th:field="*{PWD}" th:if="${i.PWD != null}">
 						<input type="hidden" th:field="*{USERLEVEL}" th:if="${i.USERLEVEL != null}">
