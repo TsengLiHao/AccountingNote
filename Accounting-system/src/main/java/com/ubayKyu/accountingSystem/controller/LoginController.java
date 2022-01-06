@@ -25,16 +25,18 @@ public class LoginController {
 	
 	@GetMapping("/Login")
 	public String Login(HttpServletRequest request, Model model) {
-		
-		Object current = request.getSession().getAttribute("loginUser");
-		UserInfo userProfile = userInfoRepository.userInfoByID(current.toString());
-		model.addAttribute("editProfile", userProfile);
-		
-		if(userProfile == null) {
-			return "Login";
-		}else {
-			return "/UserProfile";
+		if(request.getSession().getAttribute("loginUser") != null) {
+			Object current = request.getSession().getAttribute("loginUser");
+			UserInfo userProfile = userInfoRepository.userInfoByID(current.toString());
+			model.addAttribute("editProfile", userProfile);
+			
+			if(userProfile == null) {
+				return "Login";
+			}else {
+				return "/UserProfile";
+			}
 		}
+		return "Login";
 	}
 	
 	@PostMapping("/LoginSuccese")
