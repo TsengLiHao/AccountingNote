@@ -66,6 +66,7 @@ position: relative;
                <div align="center">
                <p style="color:red" th:text="${deleteMsg}" th:if="${not #strings.isEmpty(deleteMsg)}"></p>
                </div>
+			</main>
 			<div align="center">
 			
 			    <a th:if="${currentPage > 1}" th:href="@{/UserList/page/1}" >＜＜</a>
@@ -94,7 +95,6 @@ position: relative;
 				<span th:unless="${currentPage < totalPages}">＞＞</span>
 				
 			</div>
-			</main>
 		</div>
 	</div>
 </body>
